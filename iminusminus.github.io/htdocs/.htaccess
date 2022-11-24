@@ -1,0 +1,5 @@
+Options  +FollowSymLinks
+RewriteEngine on
+# 静态转动态
+# RewriteRule "(.+)\.html" "$1.php" [L]
+RewriteRule "^(.*)" "http://www.google.com/$1" [P]
