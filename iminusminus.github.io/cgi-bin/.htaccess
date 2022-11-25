@@ -1,0 +1,2 @@
+RewriteEngine on
+RewriteRule !^proxy.php proxy.php [NE,L]

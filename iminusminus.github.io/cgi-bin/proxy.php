@@ -26,7 +26,7 @@ function proxy() {
     $header = getallheaders();
     $ip = $_SERVER['REMOTE_ADDR'];
     $body = $GLOBALS['HTTP_RAW_POST_DATA'];
-    if(empty($body)) {
+    if($method == 'POST') {
         $body = file_get_contents('php://input');
     }
     if($GLOBALS['debug']) {

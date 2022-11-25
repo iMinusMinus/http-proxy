@@ -1,2 +1,0 @@
-# https://httpd.apache.org/docs/2.4/zh-cn/mod/mod_rewrite.html#rewriterule
-# RewriteRule !^proxy.php proxy.php [NE,L]
