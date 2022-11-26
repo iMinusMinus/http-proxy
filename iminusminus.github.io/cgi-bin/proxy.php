@@ -28,6 +28,10 @@ function proxy() {
     # curl -G http://host:port/cgi-bin/proxy.php/rest --> http://proxy_host:proxy_port/proxy.php/rest
     # curl -G http://host:port/cgi-bin/rest --> http://proxy_host:proxy_port/rest
     $path = $_SERVER['REQUEST_URI']; // $_SERVER['PATH_INFO'];
+    $qs_pos = strpos($path, "?");
+    if($qs_pos !== false) {
+        $path = substr($path, 0, $qs_pos);
+    }
     $query_string = $_SERVER['QUERY_STRING']; // or use http_build_query($_GET)
     $header = getallheaders();
     $ip = $_SERVER['REMOTE_ADDR'];
