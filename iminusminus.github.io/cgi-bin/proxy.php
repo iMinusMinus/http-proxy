@@ -21,7 +21,13 @@ $db_password = "";
 function proxy() {
     global $db_url, $db_name, $db_user, $db_password;
     $method = $_SERVER['REQUEST_METHOD'];
-    $path = $_SERVER['PATH_INFO']; // $_SERVER['REQUEST_URI'];
+    # $_SERVER['PATH_INFO']效果：
+    # curl -G http://host:port/cgi-bin/proxy.php/rest --> http://proxy_host:proxy_port/rest
+    # curl -G http://host:port/cgi-bin/rest --> http://proxy_host:proxy_port/
+    # $_SERVER['REQUEST_URI']效果：
+    # curl -G http://host:port/cgi-bin/proxy.php/rest --> http://proxy_host:proxy_port/proxy.php/rest
+    # curl -G http://host:port/cgi-bin/rest --> http://proxy_host:proxy_port/rest
+    $path = $_SERVER['REQUEST_URI']; // $_SERVER['PATH_INFO'];
     $query_string = $_SERVER['QUERY_STRING']; // or use http_build_query($_GET)
     $header = getallheaders();
     $ip = $_SERVER['REMOTE_ADDR'];
