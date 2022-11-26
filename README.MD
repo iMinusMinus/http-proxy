@@ -30,6 +30,16 @@
 
 ## 配置
 
+   在主配置文件（如httpd.conf）有配置AccessFileName指令（默认为".htaccess"，后续以此文件名为例），用于开放部分配置权限给虚拟主机或目录所有者。
+   同时，也设置了该文件外部不可访问，类似如下内容：
+
+   ```apacheconf
+   AccessFileName .htaccess
+   <FilesMatch "^\.ht">
+       Require all denied
+   </FilesMatch>
+   ```
+
 + Windows
 
    ```cmd
@@ -91,6 +101,8 @@
 
 ## 反向代理  
 
+   可以通过phpinfo显示出配置的已加载apache模块来判断ProxyPass、RewriteRule等指令是否可用。（搜索"Loaded Modules"）
+
    1. ProxyPass
 
       此指令不可在.htaccess文件使用，且需要加载mod_proxy、mod_proxy_http、mod_proxy_http2（转发给HTTP2协议才需要）。
@@ -108,9 +120,9 @@
       然后设置转发规则（可参考本项目的"apache2/mods-available/proxy.conf"）。接着启动：
 
       ```shell
-      sudo apache2ctl start
+      sudo apachectl start
       # 停止
-      sudo apache2ctl stop
+      sudo apachectl stop
       # curl -G http://localhost:80/iminusminus/docs 则会转发到 http://iminusminus.github.io/docs。但有可能被服务端识别，返回非正常信息
       ```
 
@@ -145,11 +157,14 @@
 
      php支持三种方式与Apache结合：Module、CGI、FastCGI。
 
-     当能够正常运行php时，可创建php脚本，接受请求，使用curl将请求转发给目标服务器（要求php编译时使用"--with-curl=$libcurl_path"参数）。
+     当能够正常运行php时，可创建php脚本，接受请求，使用curl将请求转发给目标服务器。
 
      ```shell
      # 安装php，当apache2存在时，自动将libphp8.1.so安装到apache2的模块目录
      sudo apt install php8.1
+     # php编译时使用"--with-curl=$libcurl_path"参数，或安装
+     sudo apt install php8.1-curl
+     # 安装完成后，可通过phpinfo输出，查看"cURL support"是否为"enabled"
      ```
 
      + Module
@@ -173,8 +188,8 @@
        # PHPIniDir "C:/Program Files/php"
        # Linux：文件自动安装到"/etc/php/8.1/apache2/php.ini"，无需额外处理
        #
-       sudo apache2ctl stop
-       sudo apache2ctl start
+       sudo apachectl stop
+       sudo apachectl start
        ```
 
        创建测试用php文件，类似内容如下：
